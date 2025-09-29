@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rowayda Ahmed - مصممة جرافيك</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.8s ease-out;
+    }
+    .fade-in.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .social-icons {
+      position: fixed;
+      top: 50%;
+      left: 0;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      z-index: 50;
+    }
+    .social-icons a {
+      display: block;
+      background-color: #1f2937;
+      padding: 10px;
+      border-radius: 8px 0 0 8px;
+      color: #60a5fa;
+      transition: all 0.3s;
+    }
+    .social-icons a:hover {
+      background-color: #3b82f6;
+      color: white;
+    }
+    .navbar-hidden {
+      transform: translateY(-100%);
+      transition: transform 0.3s ease-in-out;
+    }
+    .navbar-visible {
+      transform: translateY(0);
+      transition: transform 0.3s ease-in-out;
+    }
+    .gradient-bg {
+      background: linear-gradient(135deg, #1e3a8a 0%, #111827 100%);
+    }
+    
+    /* تحسينات معرض الصور */
+    .gallery-section {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
+    .gallery-item {
+      overflow: hidden;
+      border-radius: 12px;
+      height: 280px;
+      position: relative;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    .gallery-item:hover {
+      transform: scale(1.03);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+    }
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s;
+    }
+    .gallery-item:hover img {
+      transform: scale(1.1);
+    }
+    
+    /* تحسينات المودال */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.95);
+      overflow: auto;
+    }
+    .modal-content {
+      margin: auto;
+      display: block;
+      max-width: 90%;
+      max-height: 90%;
+      margin-top: 2%;
+      border-radius: 8px;
+      box-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
+    }
+    .close {
+      position: absolute;
+      top: 20px;
+      right: 35px;
+      color: #f1f1f1;
+      font-size: 40px;
+      font-weight: bold;
+      cursor: pointer;
+      z-index: 1001;
+      transition: color 0.3s;
+    }
+    .close:hover {
+      color: #3b82f6;
+    }
+    
+    /* تصميم العناوين */
+    .section-title {
+      position: relative;
+      display: inline-block;
+      margin-bottom: 2rem;
+    }
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      right: 0;
+      width: 60%;
+      height: 4px;
+      background: #3b82f6;
+      border-radius: 2px;
+    }
+    
+    /* تحسينات عامة */
+    .filter-buttons {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 2rem;
+    }
+    .filter-btn {
+      background: #374151;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .filter-btn.active, .filter-btn:hover {
+      background: #3b82f6;
+    }
+
+    /* تحسينات التباعد */
+    .nav-links {
+      display: flex;
+      gap: 2rem !important;
+    }
+    
+    .contact-info {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem !important;
+    }
+    
+    .social-links {
+      display: flex;
+      gap: 1rem !important;
+      margin-top: 1.5rem;
+    }
+    
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+    }
+    
+    .about-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: start;
+    }
+    
+    /* تصميم البطاقات الجديدة */
+    .service-card {
+      background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+      border-radius: 12px;
+      padding: 2rem;
+      transition: all 0.3s ease;
+      border: 1px solid #374151;
+    }
+    .service-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+      border-color: #3b82f6;
+    }
+    
+    @media (max-width: 768px) {
+      .about-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+      
+      .nav-links {
+        gap: 1rem !important;
+      }
+      
+      .skills-grid {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 1rem;
+      }
+      
+      .social-icons {
+        display: none;
+      }
+      
+      .gallery-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      }
+    }
+    
+    /* صورة افتراضية عند عدم وجود الصورة */
+    .placeholder-img {
+      background: linear-gradient(45deg, #3b82f6, #8b5cf6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+    
+    /* تحسينات للصور المفقودة */
+    .gallery-item img:not([src]),
+    .gallery-item img[src=""] {
+      background: linear-gradient(45deg, #3b82f6, #8b5cf6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+    }
+    
+    /* أزرار التواصل */
+    .whatsapp-btn {
+      background: #25D366;
+      color: white;
+    }
+    .whatsapp-btn:hover {
+      background: #128C7E;
+    }
+    .facebook-btn {
+      background: #1877F2;
+      color: white;
+    }
+    .facebook-btn:hover {
+      background: #0D5FD6;
+    }
+  </style>
+</head>
+<body class="bg-gray-900 text-gray-100 font-sans">
+
+  <!-- ===== Floating Social Icons ===== -->
+  <div class="social-icons">
+    <a href="https://behance.net/rowayda-ahmed" target="_blank" aria-label="Behance">
+      <i class="fab fa-behance"></i>
+    </a>
+    <a href="https://www.instagram.com/rowayda.a7medd/" target="_blank" aria-label="Instagram">
+      <i class="fab fa-instagram"></i>
+    </a>
+  </div>
+
+  <!-- ===== Navbar ===== -->
+  <nav id="navbar" class="fixed top-0 left-0 w-full bg-gray-800 bg-opacity-90 backdrop-blur-md z-50 navbar-visible shadow-lg">
+    <div class="max-w-6xl mx-auto flex justify-between items-center p-4">
+      <div class="text-blue-400 font-bold text-xl flex items-center">
+        <i class="fas fa-palette ml-2"></i>
+        <span>Rowayda Ahmed</span>
+      </div>
+      <div class="nav-links hidden md:flex">
+        <a href="#about" class="hover:text-blue-400 transition font-medium py-2 px-3">عني</a>
+        <a href="#services" class="hover:text-blue-400 transition font-medium py-2 px-3">الخدمات</a>
+        <a href="#skills" class="hover:text-blue-400 transition font-medium py-2 px-3">المهارات</a>
+        <a href="#gallery" class="hover:text-blue-400 transition font-medium py-2 px-3">معرض الأعمال</a>
+        <a href="#contact" class="hover:text-blue-400 transition font-medium py-2 px-3">اتصل بي</a>
+      </div>
+      <div class="md:hidden">
+        <button id="mobile-menu-button" class="text-blue-400 focus:outline-none">
+          <i class="fas fa-bars text-xl"></i>
+        </button>
+      </div>
+    </div>
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="hidden md:hidden bg-gray-800 px-4 pb-4">
+      <a href="#about" class="block py-3 hover:text-blue-400 transition border-b border-gray-700">عني</a>
+      <a href="#services" class="block py-3 hover:text-blue-400 transition border-b border-gray-700">الخدمات</a>
+      <a href="#skills" class="block py-3 hover:text-blue-400 transition border-b border-gray-700">المهارات</a>
+      <a href="#gallery" class="block py-3 hover:text-blue-400 transition border-b border-gray-700">معرض الأعمال</a>
+      <a href="#contact" class="block py-3 hover:text-blue-400 transition">اتصل بي</a>
+    </div>
+  </nav>
+
+  <!-- ===== Hero Section ===== -->
+  <section class="min-h-screen flex flex-col md:flex-row items-center justify-center p-10 pt-32 fade-in gradient-bg">
+    <div class="flex flex-col md:flex-row items-center max-w-6xl">
+      <div class="relative mb-8 md:mb-0 md:ml-12">
+        <div class="w-48 h-48 md:w-64 md:h-64 rounded-full border-4 border-blue-500 overflow-hidden shadow-2xl">
+          <!-- ضع صورتك الشخصية هنا -->
+          <img src="images/profile.jpg" alt="رويدا أحمد" class="w-full h-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div class="placeholder-img w-full h-full" style="display:none;">صورة رويدا</div>
+        </div>
+        <div class="absolute -bottom-2 -left-2 bg-blue-500 text-white rounded-full p-2 shadow-lg">
+          <i class="fas fa-paint-brush text-xl"></i>
+        </div>
+      </div>
+      
+      <div class="text-center md:text-right">
+        <h1 class="text-4xl md:text-6xl font-bold mb-4">مرحباً، أنا <span class="text-blue-400">رويدا أحمد</span></h1>
+        <p class="text-xl md:text-2xl text-gray-300 mb-6">مصممة جرافيك</p>
+        <p class="text-lg text-gray-400 max-w-xl mb-8">أحول الأفكار إلى تصميمات إبداعية تجذب الأنظار وتنقل الرسالة بفعالية</p>
+        <div class="flex flex-wrap justify-center md:justify-end gap-4">
+          <a href="#gallery" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-medium transition duration-300">
+            شاهد أعمالي
+          </a>
+          <a href="#contact" class="border border-blue-500 text-blue-400 hover:bg-blue-500 hover:text-white px-6 py-3 rounded-lg font-medium transition duration-300">
+            تواصل معي
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== About Section ===== -->
+  <section id="about" class="py-20 px-6 md:px-20 fade-in bg-gray-800">
+    <div class="max-w-6xl mx-auto">
+      <h2 class="text-3xl font-bold text-blue-500 mb-8 section-title">عني</h2>
+      <div class="about-content">
+        <div>
+          <p class="text-gray-300 leading-relaxed text-lg mb-6">
+            أنا ادرس في كلية الحاسبات و المعلومات جامعة النهضه (NUB) و مصممة جرافيك شغوفة بتحويل الأفكار إلى واقع مرئي مذهل. لدي خبرة 3 سنوات في مجال تصميم الجرافيك، عملت خلالها مع عملاء متنوعين من مختلف القطاعات.
+          </p>
+          <p class="text-gray-300 leading-relaxed text-lg mb-6">
+            أؤمن بأن التصميم الجيد ليس مجرد شكل جميل، بل هو حل لمشكلة ونقل فعال للرسالة. أعمل على فهم احتياجات العميل بدقة ثم أترجمها إلى تصميمات إبداعية تلبي توقعاته وتتجاوزها.
+          </p>
+          <div class="flex flex-wrap gap-4 mt-8">
+            <div class="bg-gray-700 px-4 py-3 rounded-lg">
+              <span class="text-blue-400 font-medium">الموقع:</span> بني سويف، مصر
+            </div>
+            <div class="bg-gray-700 px-4 py-3 rounded-lg">
+              <span class="text-blue-400 font-medium">الخبرة:</span> 3+ سنوات
+            </div>
+            <div class="bg-gray-700 px-4 py-3 rounded-lg">
+              <span class="text-blue-400 font-medium">الحالة:</span> متاح للمشاريع
+            </div>
+          </div>
+        </div>
+        <div class="bg-gray-700 p-6 rounded-xl">
+          <h3 class="text-xl font-semibold mb-6 text-blue-400">اهتماماتي التصميمية</h3>
+          <ul class="space-y-4">
+            <li class="flex items-center">
+              <i class="fas fa-pen-nib text-blue-400 ml-3 text-lg"></i>
+              <span class="text-gray-300">هوية العلامة التجارية</span>
+            </li>
+            <li class="flex items-center">
+              <i class="fas fa-file-alt text-blue-400 ml-3 text-lg"></i>
+              <span class="text-gray-300">تصميم المطبوعات</span>
+            </li>
+            <li class="flex items-center">
+              <i class="fas fa-mobile-alt text-blue-400 ml-3 text-lg"></i>
+              <span class="text-gray-300">واجهات المستخدم</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Services Section ===== -->
+  <section id="services" class="py-20 px-6 md:px-20 fade-in">
+    <div class="max-w-6xl mx-auto">
+      <h2 class="text-3xl font-bold text-blue-500 mb-8 section-title">الخدمات</h2>
+      <p class="text-gray-400 text-lg mb-10 max-w-3xl">
+        أقدم مجموعة متنوعة من خدمات التصميم الجرافيكي التي تلبي احتياجاتك المختلفة.
+      </p>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="service-card">
+          <div class="text-blue-400 mb-4">
+            <i class="fas fa-palette text-4xl"></i>
+          </div>
+          <h3 class="text-xl font-semibold mb-3">هوية العلامة التجارية</h3>
+          <p class="text-gray-300">
+            تصميم هوية بصرية متكاملة تشمل الشعار، الألوان، الخطوط، ودليل الاستخدام.
+          </p>
+        </div>
+        
+        <div class="service-card">
+          <div class="text-blue-400 mb-4">
+            <i class="fas fa-print text-4xl"></i>
+          </div>
+          <h3 class="text-xl font-semibold mb-3">تصميم المطبوعات</h3>
+          <p class="text-gray-300">
+            تصميم بروشورات، فلayers، كروت عمل، وغلافات الكتب والمجلات.
+          </p>
+        </div>
+        
+        <div class="service-card">
+          <div class="text-blue-400 mb-4">
+            <i class="fas fa-mobile-alt text-4xl"></i>
+          </div>
+          <h3 class="text-xl font-semibold mb-3">تصميم وسائل التواصل</h3>
+          <p class="text-gray-300">
+            تصميم منشورات، ستوريات، وبانرات لوسائل التواصل الاجتماعي.
+          </p>
+        </div>
+        
+        <div class="service-card">
+          <div class="text-blue-400 mb-4">
+            <i class="fas fa-pen-nib text-4xl"></i>
+          </div>
+          <h3 class="text-xl font-semibold mb-3">الرسم التوضيحي</h3>
+          <p class="text-gray-300">
+            تصميم رسومات توضيحية فريدة تناسب احتياجاتك ومشروعك.
+          </p>
+        </div>
+        
+        <div class="service-card">
+          <div class="text-blue-400 mb-4">
+            <i class="fas fa-edit text-4xl"></i>
+          </div>
+          <h3 class="text-xl font-semibold mb-3">تحرير الصور</h3>
+          <p class="text-gray-300">
+            تحرير وتعديل الصور باحترافية لتناسب الاستخدامات المختلفة.
+          </p>
+        </div>
+        
+        <div class="service-card">
+          <div class="text-blue-400 mb-4">
+            <i class="fas fa-layer-group text-4xl"></i>
+          </div>
+          <h3 class="text-xl font-semibold mb-3">تصميم UI/UX</h3>
+          <p class="text-gray-300">
+            تصميم واجهات مستخدم جذابة وسهلة الاستخدام للتطبيقات والمواقع.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Skills Section ===== -->
+  <section id="skills" class="py-20 px-6 md:px-20 fade-in bg-gray-800">
+    <div class="max-w-6xl mx-auto">
+      <h2 class="text-3xl font-bold text-blue-500 mb-8 section-title">المهارات والتقنيات</h2>
+      <p class="text-gray-400 text-lg mb-10 max-w-3xl">
+        أمتلك مهارات متقدمة في مجموعة متنوعة من برامج وتقنيات التصميم التي تمكنني من تنفيذ مشاريع إبداعية بمستوى احترافي.
+      </p>
+      
+      <div class="skills-grid">
+        <div class="bg-gray-700 p-6 rounded-lg text-center hover:bg-blue-600 transition duration-300">
+          <i class="fab fa-adobe text-5xl mb-4 text-blue-400"></i>
+          <h3 class="font-semibold text-lg">Adobe Creative Suite</h3>
+        </div>
+        <div class="bg-gray-700 p-6 rounded-lg text-center hover:bg-blue-600 transition duration-300">
+          <i class="fab fa-figma text-5xl mb-4 text-blue-400"></i>
+          <h3 class="font-semibold text-lg">Figma</h3>
+        </div>
+        <div class="bg-gray-700 p-6 rounded-lg text-center hover:bg-blue-600 transition duration-300">
+          <i class="fas fa-pen-nib text-5xl mb-4 text-blue-400"></i>
+          <h3 class="font-semibold text-lg">Illustration</h3>
+        </div>
+        <div class="bg-gray-700 p-6 rounded-lg text-center hover:bg-blue-600 transition duration-300">
+          <i class="fas fa-edit text-5xl mb-4 text-blue-400"></i>
+          <h3 class="font-semibold text-lg">Photo Editing</h3>
+        </div>
+        <div class="bg-gray-700 p-6 rounded-lg text-center hover:bg-blue-600 transition duration-300">
+          <i class="fas fa-font text-5xl mb-4 text-blue-400"></i>
+          <h3 class="font-semibold text-lg">Typography</h3>
+        </div>
+        <div class="bg-gray-700 p-6 rounded-lg text-center hover:bg-blue-600 transition duration-300">
+          <i class="fas fa-palette text-5xl mb-4 text-blue-400"></i>
+          <h3 class="font-semibold text-lg">Color Theory</h3>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Gallery Section ===== -->
+  <section id="gallery" class="py-20 px-6 md:px-20 fade-in gallery-section">
+    <div class="max-w-6xl mx-auto">
+      <h2 class="text-3xl font-bold text-blue-500 mb-8 section-title">معرض الأعمال</h2>
+      <p class="text-gray-400 text-lg mb-10 max-w-3xl text-center mx-auto">
+        استكشف مجموعة متنوعة من أعمالي التصميمية في مختلف المجالات. انقر على أي صورة لمشاهدتها بحجم أكبر.
+      </p>
+      
+      <!-- أزرار التصفية -->
+      <div class="filter-buttons">
+        <button class="filter-btn active" data-filter="all">الكل</button>
+        <button class="filter-btn" data-filter="print">تصميم اعلانات</button>
+        <button class="filter-btn" data-filter="clothes">ملابس</button>
+        <button class="filter-btn" data-filter="restaurant">مطاعم</button>
+        <button class="filter-btn" data-filter="branding">هوية العلامة التجارية</button>
+        <button class="filter-btn" data-filter="digital">تصميم لوجوهات</button>
+      </div>
+      
+      <div class="gallery-grid">
+        <!-- إضافة الصور هنا -->
+         <div class="gallery-item" data-category="restaurant">
+          <img src="images\restaurant-3.jpg" alt="مطاعم" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9InVybCgjZ3JhZGllbnQpIi8+Cjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSJ3aGl0ZSIgZm9udC1zaXplPSIxNCI+QnJhbmRpbmcgMTwvdGV4dD4KPC9zdmc+'">
+        </div>
+        <div class="gallery-item" data-category="restaurant">
+          <img src="images\restaurant-2.jpg" alt="تصميم هوية تجارية" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9InVybCgjZ3JhZGllbnQpIi8+Cjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSJ3aGl0ZSIgZm9udC1zaXplPSIxNCI+QnJhbmRpbmcgMTwvdGV4dD4KPC9zdmc+'">
+        </div>
+        <div class="gallery-item" data-category="restaurant">
+          <img src="images\restaurant-1.jpg" alt="تصميم هوية تجارية" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9InVybCgjZ3JhZGllbnQpIi8+Cjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSJ3aGl0ZSIgZm9udC1zaXplPSIxNCI+QnJhbmRpbmcgMTwvdGV4dD4KPC9zdmc+'">
+        </div>
+        <div class="gallery-item" data-category="restaurant">
+          <img src="images\540745511_17854212582519338_1901323829882677060_n..webp" alt="تصميم هوية تجارية" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9InVybCgjZ3JhZGllbnQpIi8+Cjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSJ3aGl0ZSIgZm9udC1zaXplPSIxNCI+QnJhbmRpbmcgMTwvdGV4dD4KPC9zdmc+'">
+        </div>
+        <div class="gallery-item" data-category="restaurant">
+          <img src="images\540682593_17854212591519338_389782845224457361_n..webp" alt="تصميم هوية تجارية" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9InVybCgjZ3JhZGllbnQpIi8+Cjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSJ3aGl0ZSIgZm9udC1zaXplPSIxNCI+QnJhbmRpbmcgMTwvdGV4dD4KPC9zdmc+'">
+        </div>
+        <div class="gallery-item" data-category="print">
+          <img src="images\535338435_17852541696519338_1197506892188486956_n..webp" alt="تصميم هوية تجارية" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9InVybCgjZ3JhZGllbnQpIi8+Cjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSJ3aGl0ZSIgZm9udC1zaXplPSIxNCI+QnJhbmRpbmcgMTwvdGV4dD4KPC9zdmc+'">
+        </div>
+        <div class="gallery-item" data-category="print">
+          <img src="images\535081595_17852541660519338_8990966287420622184_n..webp" alt="تصميم هوية تجارية" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9InVybCgjZ3JhZGllbnQpIi8+Cjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSJ3aGl0ZSIgZm9udC1zaXplPSIxNCI+QnJhbmRpbmcgMTwvdGV4dD4KPC9zdmc+'">
+        </div>
+        <div class="gallery-item" data-category="print">
+          <img src="images\534601154_17852541678519338_2921200310090417868_n..webp" alt="تصميم هوية تجارية" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9InVybCgjZ3JhZGllbnQpIi8+Cjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSJ3aGl0ZSIgZm9udC1zaXplPSIxNCI+QnJhbmRpbmcgMTwvdGV4dD4KPC9zdmc+'">
+        </div>
+        <div class="gallery-item" data-category="print">
+          <img src="images\534574730_17852541669519338_5443230030129238164_n..webp" alt="تصميم هوية تجارية" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9InVybCgjZ3JhZGllbnQpIi8+Cjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSJ3aGl0ZSIgZm9udC1zaXplPSIxNCI+QnJhbmRpbmcgMTwvdGV4dD4KPC9zdmc+'">
+        </div>
+        <div class="gallery-item" data-category="clothes">
+          <img src="images\535023640_17852274957519338_8696928167180715767_n..webp" alt="تصميم هوية تجارية" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9InVybCgjZ3JhZGllbnQpIi8+Cjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSJ3aGl0ZSIgZm9udC1zaXplPSIxNCI+QnJhbmRpbmcgMTwvdGV4dD4KPC9zdmc+'">
+        </div>
+        <div class="gallery-item" data-category="clothes">
+          <img src="images\534312313_17852274960519338_6846829085024865309_n..webp" alt="تصميم هوية تجارية" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9InVybCgjZ3JhZGllbnQpIi8+Cjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSJ3aGl0ZSIgZm9udC1zaXplPSIxNCI+QnJhbmRpbmcgMTwvdGV4dD4KPC9zdmc+'">
+        </div>
+        <div class="gallery-item" data-category="clothes">
+          <img src="images\533493625_17852274975519338_3315717366749734094_n..webp" alt="تصميم مطبوع" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9InVybCgjZ3JhZGllbnQpIi8+Cjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSJ3aGl0ZSIgZm9udC1zaXplPSIxNCI+UHJpbnQgMTwvdGV4dD4KPC9zdmc+'">
+        </div>
+        <div class="gallery-item" data-category="clothes">
+          <img src="images\8 (7).png" alt="تصميم رقمي" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9InVybCgjZ3JhZGllbnQpIi8+Cjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSJ3aGl0ZSIgZm9udC1zaXplPSIxNCI+RGlnaXRhbCAxPC90ZXh0Pgo8L3N2Zz4='">
+        </div>
+        <div class="gallery-item" data-category="clothes">
+          <img src="images\534324502_17852273082519338_5831251180519308331_n..webp" alt="رسم توضيحي" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9InVybCgjZ3JhZGllbnQpIi8+Cjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSJ3aGl0ZSIgZm9udC1zaXplPSIxNCI+SWxsdXN0cmF0aW9uIDE8L3RleHQ+Cjwvc3ZnPg=='">
+        </div>
+        <div class="gallery-item" data-category="clothes">
+          <img src="images\534312289_17852273091519338_5653834461096829663_n..webp" alt="تصميم هوية تجارية" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9InVybCgjZ3JhZGllbnQpIi8+Cjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSJ3aGl0ZSIgZm9udC1zaXplPSIxNCI+QnJhbmRpbmcgMjwvdGV4dD4KPC9zdmc+'">
+        </div>
+        <div class="gallery-item" data-category="clothes">
+          <img src="images\8 (4).png" alt="تصميم مطبوع" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9InVybCgjZ3JhZGllbnQpIi8+Cjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSJ3aGl0ZSIgZm9udC1zaXplPSIxNCI+UHJpbnQgMjwvdGV4dD4KPC9zdmc+'">
+        </div>
+        <div class="gallery-item" data-category="clothes">
+          <img src="images\8 (5).png" alt="تصميم رقمي" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9InVybCgjZ3JhZGllbnQpIi8+Cjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSJ3aGl0ZSIgZm9udC1zaXplPSIxNCI+RGlnaXRhbCAyPC90ZXh0Pgo8L3N2Zz4='">
+        </div>
+        <div class="gallery-item" data-category="clothes">
+          <img src="images\8 (6).png" alt="رسم توضيحي" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9InVybCgjZ3JhZGllbnQpIi8+Cjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSJ3aGl0ZSIgZm9udC1zaXplPSIxNCI+SWxsdXN0cmF0aW9uIDI8L3RleHQ+Cjwvc3ZnPg=='">
+        </div>
+        <div class="gallery-item" data-category="restaurant">
+          <img src="images\1.png" alt="رسم توضيحي" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9InVybCgjZ3JhZGllbnQpIi8+Cjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSJ3aGl0ZSIgZm9udC1zaXplPSIxNCI+SWxsdXN0cmF0aW9uIDI8L3RleHQ+Cjwvc3ZnPg=='">
+        </div>
+        <div class="gallery-item" data-category="restaurant">
+          <img src="images\2.png" alt="رسم توضيحي" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9InVybCgjZ3JhZGllbnQpIi8+Cjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSJ3aGl0ZSIgZm9udC1zaXplPSIxNCI+SWxsdXN0cmF0aW9uIDI8L3RleHQ+Cjwvc3ZnPg=='">
+        </div>
+        <div class="gallery-item" data-category="restaurant">
+          <img src="images\3.png" alt="رسم توضيحي" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9InVybCgjZ3JhZGllbnQpIi8+Cjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSJ3aGl0ZSIgZm9udC1zaXplPSIxNCI+SWxsdXN0cmF0aW9uIDI8L3RleHQ+Cjwvc3ZnPg=='">
+        </div>
+        <div class="gallery-item" data-category="restaurant">
+          <img src="images\4.png" alt="رسم توضيحي" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9InVybCgjZ3JhZGllbnQpIi8+Cjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSJ3aGl0ZSIgZm9udC1zaXplPSIxNCI+SWxsdXN0cmF0aW9uIDI8L3RleHQ+Cjwvc3ZnPg=='">
+        </div>
+        <div class="gallery-item" data-category="restaurant">
+          <img src="images\5.png" alt="رسم توضيحي" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9InVybCgjZ3JhZGllbnQpIi8+Cjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSJ3aGl0ZSIgZm9udC1zaXplPSIxNCI+SWxsdXN0cmF0aW9uIDI8L3RleHQ+Cjwvc3ZnPg=='">
+        </div>
+        <div class="gallery-item" data-category="restaurant">
+          <img src="images\8 (3).png" alt="رسم توضيحي" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9InVybCgjZ3JhZGllbnQpIi8+Cjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSJ3aGl0ZSIgZm9udC1zaXplPSIxNCI+SWxsdXN0cmF0aW9uIDI8L3RleHQ+Cjwvc3ZnPg=='">
+        </div>
+        <div class="gallery-item" data-category="restaurant">
+          <img src="images\6.png" alt="رسم توضيحي" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9InVybCgjZ3JhZGllbnQpIi8+Cjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSJ3aGl0ZSIgZm9udC1zaXplPSIxNCI+SWxsdXN0cmF0aW9uIDI8L3RleHQ+Cjwvc3ZnPg=='">
+        </div>
+        <div class="gallery-item" data-category="restaurant">
+          <img src="images\8 (2).png" alt="رسم توضيحي" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9InVybCgjZ3JhZGllbnQpIi8+Cjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSJ3aGl0ZSIgZm9udC1zaXplPSIxNCI+SWxsdXN0cmF0aW9uIDI8L3RleHQ+Cjwvc3ZnPg=='">
+        </div>
+        <div class="gallery-item" data-category="restaurant">
+          <img src="images\7.png" alt="رسم توضيحي" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9InVybCgjZ3JhZGllbnQpIi8+Cjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSJ3aGl0ZSIgZm9udC1zaXplPSIxNCI+SWxsdXN0cmF0aW9uIDI8L3RleHQ+Cjwvc3ZnPg=='">
+        </div>
+        <div class="gallery-item" data-category="restaurant">
+          <img src="images\8.png" alt="رسم توضيحي" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9InVybCgjZ3JhZGllbnQpIi8+Cjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSJ3aGl0ZSIgZm9udC1zaXplPSIxNCI+SWxsdXN0cmF0aW9uIDI8L3RleHQ+Cjwvc3ZnPg=='">
+        </div>
+        <div class="gallery-item" data-category="clothes">
+          <img src="images\533551107_17852275644519338_2190217210224994612_n..webp" alt="رسم توضيحي" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9InVybCgjZ3JhZGllbnQpIi8+Cjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSJ3aGl0ZSIgZm9udC1zaXplPSIxNCI+SWxsdXN0cmF0aW9uIDI8L3RleHQ+Cjwvc3ZnPg=='">
+        </div>
+        <div class="gallery-item" data-category="clothes">
+          <img src="images\533521653_17852275665519338_269732990796058845_n..webp" alt="رسم توضيحي" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9InVybCgjZ3JhZGllbnQpIi8+Cjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSJ3aGl0ZSIgZm9udC1zaXplPSIxNCI+SWxsdXN0cmF0aW9uIDI8L3RleHQ+Cjwvc3ZnPg=='">
+        </div>
+        <div class="gallery-item" data-category="clothes">
+          <img src="images\8 (8).png" alt="رسم توضيحي" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9InVybCgjZ3JhZGllbnQpIi8+Cjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSJ3aGl0ZSIgZm9udC1zaXplPSIxNCI+SWxsdXN0cmF0aW9uIDI8L3RleHQ+Cjwvc3ZnPg=='">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Contact Section ===== -->
+  <section id="contact" class="py-20 px-6 md:px-20 fade-in bg-gray-800">
+    <div class="max-w-6xl mx-auto">
+      <h2 class="text-3xl font-bold text-blue-500 mb-8 section-title">تواصل معي</h2>
+      <p class="text-gray-400 text-lg mb-10 max-w-3xl">
+        مستعد للبدء بمشروعك القادم؟ لا تتردد في التواصل معي لمناقشة أفكارك واحتياجاتك التصميمية.
+      </p>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+        <div>
+          <div class="bg-gray-700 p-6 rounded-xl mb-6">
+            <h3 class="text-xl font-semibold mb-6 text-blue-400">معلومات التواصل</h3>
+            <div class="contact-info">
+              <div class="flex items-center">
+                <i class="fas fa-envelope text-blue-400 ml-3 text-xl"></i>
+                <a href="mailto:rowaydaahmed319@gmail.com" class="text-gray-300 hover:text-blue-400 transition text-lg">rowaydaahmed319@gmail.com</a>
+              </div>
+              <div class="flex items-center">
+                <i class="fab fa-behance text-blue-400 ml-3 text-xl"></i>
+                <a href="https://behance.net/rowayda-ahmed" class="text-gray-300 hover:text-blue-400 transition text-lg" target="_blank">behance.net/rowayda-ahmed</a>
+              </div>
+              <div class="flex items-center">
+                <i class="fas fa-map-marker-alt text-blue-400 ml-3 text-xl"></i>
+                <span class="text-gray-300 text-lg">بني سويف، مصر</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="bg-gray-700 p-6 rounded-xl">
+            <h3 class="text-xl font-semibold mb-6 text-blue-400">تواصل مباشر</h3>
+            <div class="flex flex-col gap-4">
+              <a href="https://wa.me/201210665115" target="_blank" class="whatsapp-btn px-6 py-3 rounded-lg font-medium transition duration-300 flex items-center justify-center gap-2">
+                <i class="fab fa-whatsapp text-xl"></i>
+                تواصل عبر واتساب
+              </a>
+              <a href="https://www.facebook.com/profile.php?id=61579235951140&rdid=255kbd3zidPdh3xN&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F1FA2jmND6D%2F" target="_blank" class="facebook-btn px-6 py-3 rounded-lg font-medium transition duration-300 flex items-center justify-center gap-2">
+                <i class="fab fa-facebook text-xl"></i>
+                تابعني على فيسبوك
+              </a>
+            </div>
+            
+            <div class="social-links">
+              <a href="https://behance.net/rowayda-ahmed" target="_blank" class="bg-gray-600 hover:bg-blue-500 p-4 rounded-full transition duration-300">
+                <i class="fab fa-behance text-xl"></i>
+              </a>
+              <a href="https://www.instagram.com/rowayda.a7medd/" target="_blank" class="bg-gray-600 hover:bg-purple-500 p-4 rounded-full transition duration-300">
+                <i class="fab fa-instagram text-xl"></i>
+              </a>
+              <a href="https://www.linkedin.com/in/rowayda-ahmed/" target="_blank" class="bg-gray-600 hover:bg-blue-400 p-4 rounded-full transition duration-300">
+                <i class="fab fa-linkedin-in text-xl"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-gray-700 p-6 rounded-xl">
+          <h3 class="text-xl font-semibold mb-6 text-blue-400">أرسل لي رسالة</h3>
+          <form class="space-y-6" id="contactForm">
+            <div>
+              <label for="name" class="block text-gray-300 mb-3 text-lg">اسمك</label>
+              <input type="text" id="name" class="w-full bg-gray-600 border border-gray-500 rounded-lg px-4 py-3 focus:outline-none focus:border-blue-500 text-lg" required>
+            </div>
+            <div>
+              <label for="email" class="block text-gray-300 mb-3 text-lg">بريدك الإلكتروني</label>
+              <input type="email" id="email" class="w-full bg-gray-600 border border-gray-500 rounded-lg px-4 py-3 focus:outline-none focus:border-blue-500 text-lg" required>
+            </div>
+            <div>
+              <label for="message" class="block text-gray-300 mb-3 text-lg">رسالتك</label>
+              <textarea id="message" rows="5" class="w-full bg-gray-600 border border-gray-500 rounded-lg px-4 py-3 focus:outline-none focus:border-blue-500 text-lg" required></textarea>
+            </div>
+            <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-medium transition duration-300 w-full text-lg">
+              أرسل الرسالة
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Footer ===== -->
+  <footer class="text-center p-6 bg-gray-900 text-gray-400 fade-in">
+    <div class="max-w-6xl mx-auto">
+      <p class="text-lg">© 2025  Rowayda Ahmed. جميع الحقوق محفوظة.</p>
+      <p class="mt-3 text-sm">تم التصميم والبرمجة بواسطة AR </p>
+    </div>
+  </footer>
+
+  <!-- ===== Image Modal ===== -->
+  <div id="imageModal" class="modal">
+    <span class="close">&times;</span>
+    <img class="modal-content" id="modalImage">
+  </div>
+
+  <!-- ===== JS ===== -->
+  <script>
+    // Fade-in
+    const faders = document.querySelectorAll('.fade-in');
+    const appearOptions = { threshold: 0.2, rootMargin: "0px 0px -50px 0px" };
+    const appearOnScroll = new IntersectionObserver(function(entries, observer){
+      entries.forEach(entry => {
+        if(!entry.isIntersecting) return;
+        entry.target.classList.add('show');
+        observer.unobserve(entry.target);
+      });
+    }, appearOptions);
+    faders.forEach(fader => appearOnScroll.observe(fader));
+
+    // Navbar hide/show
+    let lastScroll = 0;
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      const currentScroll = window.pageYOffset;
+      if(currentScroll <= 0){
+        navbar.classList.remove('navbar-hidden');
+        navbar.classList.add('navbar-visible');
+        return;
+      }
+      if(currentScroll > lastScroll && currentScroll > 100){
+        // Scrolling down
+        navbar.classList.remove('navbar-visible');
+        navbar.classList.add('navbar-hidden');
+      } else {
+        // Scrolling up
+        navbar.classList.remove('navbar-hidden');
+        navbar.classList.add('navbar-visible');
+      }
+      lastScroll = currentScroll;
+    });
+
+    // Mobile menu toggle
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+    
+    mobileMenuButton.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+
+    // Close mobile menu when clicking on a link
+    const mobileMenuLinks = mobileMenu.querySelectorAll('a');
+    mobileMenuLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.add('hidden');
+      });
+    });
+
+    // Image modal
+    const modal = document.getElementById('imageModal');
+    const modalImg = document.getElementById('modalImage');
+    const closeBtn = document.querySelector('.close');
+
+    function initModal() {
+      document.querySelectorAll('.gallery-item img').forEach(img => {
+        img.addEventListener('click', function() {
+          modal.style.display = 'block';
+          modalImg.src = this.src;
+        });
+      });
+
+      closeBtn.addEventListener('click', function() {
+        modal.style.display = 'none';
+      });
+
+      window.addEventListener('click', function(event) {
+        if (event.target === modal) {
+          modal.style.display = 'none';
+        }
+      });
+    }
+
+    // Gallery filtering
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const galleryItems = document.querySelectorAll('.gallery-item');
+
+    filterButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        // Remove active class from all buttons
+        filterButtons.forEach(btn => btn.classList.remove('active'));
+        // Add active class to clicked button
+        button.classList.add('active');
+        
+        const filterValue = button.getAttribute('data-filter');
+        
+        galleryItems.forEach(item => {
+          if (filterValue === 'all' || item.getAttribute('data-category') === filterValue) {
+            item.style.display = 'block';
+          } else {
+            item.style.display = 'none';
+          }
+        });
+      });
+    });
+
+    // Form submission
+    const contactForm = document.getElementById('contactForm');
+    contactForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      alert('شكراً لتواصلك! سأرد عليك في أقرب وقت ممكن.');
+      contactForm.reset();
+    });
+
+    // Initialize everything when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+      initModal();
+      console.log('Portfolio initialized successfully');
+    });
+  </script>
+
+</body>
+</html>
